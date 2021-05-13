@@ -1,0 +1,24 @@
+{
+  "name": "sign-calendar",
+  "version": "1.0.0",
+  "description": "test",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zdh-chase/sign-calendar.git"
+  },
+  "author": "zzz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zdh-chase/sign-calendar/issues"
+  },
+  "homepage": "https://github.com/zdh-chase/sign-calendar#readme",
+  "dependencies": {
+    "dayjs": "^1.10.4",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2"
+  }
+}
