@@ -1,10 +1,12 @@
 {
-  "name": "sign-calendar",
+  "name": "chasez-sign-calendar",
   "version": "1.0.0",
   "description": "test",
-  "main": "src/index.js",
+  "main": "lib/index.js",
+  "module": "es/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "father-build"
   },
   "repository": {
     "type": "git",
@@ -20,5 +22,8 @@
     "dayjs": "^1.10.4",
     "prop-types": "^15.7.2",
     "react": "^17.0.2"
+  },
+  "devDependencies": {
+    "father-build": "^1.19.4"
   }
 }

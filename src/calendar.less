@@ -33,6 +33,7 @@
     display: flex;
     flex-flow: row nowrap;
     background: #fff;
+    color: #999;
     .head-cell {
       display: flex;
       flex-basis: 14.28571%;
@@ -63,6 +64,7 @@
         align-items: center;
         justify-content: center;
         height: 36px;
+        position: relative;
         &.is-other-month-day {
           color: #999;
         }
@@ -75,18 +77,20 @@
         }
         .current-day {
           color: #fff;
-          background: #4378be;
+          background: #fa9a5d;
           border-radius: 50%;
         }
         .circle-mark {
-          border: 1px solid #4378be;
+          border: 1px solid #fa9a5d;
           border-radius: 50%;
         }
         .dot-mark {
           width: 4px;
           height: 4px;
-          background-color: #4378be;
+          background-color: #fa9a5d;
           border-radius: 50%;
+          position: absolute;
+          bottom: 0px;
         }
       }
     }
@@ -103,5 +107,19 @@
         transform: rotate(180deg);
       }
     }
+  }
+  .def-cur {
+    cursor: pointer;
+  }
+  .activity-dot {
+    width: 4px;
+    height: 4px;
+    background-color: #fa9a5d;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+  .inline-block {
+    display: inline-block;
+    vertical-align: middle;
   }
 }
