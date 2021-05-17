@@ -155,6 +155,43 @@ class MonthView extends PureComponent {
     handleBottomOperate() {
     }
 
+    getActivityDateLabel() {
+        let { activityDates } = this.props;
+        let { monthDates } = this.state;
+        let currentShowDate = monthDates[1] || [];
+        if (currentShowDate.length && activityDates.length) {
+            let showDateStart = dayjs(currentShowDate[0]).format('YYYY-MM-DD');
+            let showDateEnd = dayjs(currentShowDate[currentShowDate.length - 1]).format('YYYY-MM-DD');
+            return (
+                <div>
+                    {
+                        activityDates.map((elem, index) => {
+                            let startTime = elem.formDate;
+                            let endTime = elem.toDate;
+                            let start = dayjs(startTime).isBetween(showDateStart, showDateEnd, null, '[]');
+                            let end = dayjs(endTime).isBetween(showDateStart, showDateEnd, null, '[]');
+                            if (start || end) {
+                                return (
+                                    <div key={`activity_${index}`}>
+                                    <span
+                                        className="activity-dot inline-block"
+                                        style={{
+                                            background: elem.color,
+                                        }}
+                                    />
+                                        <span className="inline-block">{elem.name}</span>
+                                    </div>
+                                );
+                            }
+                            return '';
+                        })
+                    }
+                </div>
+            );
+        }
+        return '';
+    }
+
     render() {
         const {
             monthDates,
@@ -173,11 +210,12 @@ class MonthView extends PureComponent {
             markType,
             disableWeekView,
             activityDates,
+            pc,
             showCurrentDay,
         } = this.props
-        const isMonthView = showType === 'month'
+        const isMonthView = showType === 'month';
         return (
-            <div className="react-h5-calendar">
+            <div className={`react-h5-calendar ${pc ? 'pc' : ''}`}>
                 <div className="calendar-operate">
                     <div className="icon left-icon def-cur" onClick={this.handleMonthToggle.bind(this, 'prev')}>
                         <img src={arrow}/>
@@ -194,7 +232,6 @@ class MonthView extends PureComponent {
                         </div>
                     ))}
                 </div>
-
                 <div
                     className={`calendar-body ${isMonthView ? '' : 'week-mode'}`}
                     ref={this.calendarRef}
@@ -263,23 +300,7 @@ class MonthView extends PureComponent {
                         })}
                     </div>
                 </div>
-                <div>
-                    {
-                        activityDates.map((elem) => {
-                            return (
-                                <div>
-                                    <span
-                                        className="activity-dot inline-block"
-                                        style={{
-                                            background: elem.color,
-                                        }}
-                                    />
-                                    <span className="inline-block">{elem.name}</span>
-                                </div>
-                            );
-                        })
-                    }
-                </div>
+                {this.getActivityDateLabel()}
             </div>
         )
     }
@@ -299,6 +320,7 @@ MonthView.propTypes = {
     disableWeekView: PropTypes.bool,
     activityDates: PropTypes.array,
     showCurrentDay: PropTypes.bool,
+    pc: PropTypes.bool,
 }
 
 MonthView.defaultProps = {
@@ -315,6 +337,7 @@ MonthView.defaultProps = {
     disableWeekView: false,
     activityDates: [],
     showCurrentDay: false,
+    pc: true,
 }
 
 export default MonthView

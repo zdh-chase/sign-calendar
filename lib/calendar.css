@@ -1,9 +1,9 @@
 .react-h5-calendar {
   box-sizing: border-box;
   width: 100%;
-  padding-bottom: 10px;
+  padding-bottom: 20px;
   overflow: hidden;
-  font-size: 14px;
+  font-size: 28px;
   background-color: #fff;
 }
 .react-h5-calendar * {
@@ -14,18 +14,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 30px;
+  height: 60px;
+  padding: 40px 0;
 }
 .react-h5-calendar .calendar-operate .icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 30px;
+  width: 100px;
+  height: 60px;
 }
 .react-h5-calendar .calendar-operate .icon img {
   width: auto;
-  height: 16px;
+  height: 32px;
 }
 .react-h5-calendar .calendar-operate .icon.left-icon {
   transform: rotate(180deg);
@@ -41,15 +42,15 @@
   flex-basis: 14.28571%;
   align-items: center;
   justify-content: center;
-  height: 34px;
+  height: 68px;
 }
 .react-h5-calendar .calendar-body {
   position: relative;
-  height: 216px;
+  height: 432px;
   transition: height 0.3s;
 }
 .react-h5-calendar .calendar-body.week-mode {
-  height: 36px;
+  height: 72px;
 }
 .react-h5-calendar .calendar-body .month-cell {
   position: absolute;
@@ -66,7 +67,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 36px;
+  height: 72px;
   position: relative;
 }
 .react-h5-calendar .calendar-body .month-cell .day-cell.is-other-month-day {
@@ -76,8 +77,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 64px;
+  height: 64px;
 }
 .react-h5-calendar .calendar-body .month-cell .day-cell .current-day {
   color: #fff;
@@ -89,8 +90,8 @@
   border-radius: 50%;
 }
 .react-h5-calendar .calendar-body .month-cell .day-cell .dot-mark {
-  width: 4px;
-  height: 4px;
+  width: 8px;
+  height: 8px;
   background-color: #fa9a5d;
   border-radius: 50%;
   position: absolute;
@@ -100,11 +101,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 20px;
+  height: 40px;
 }
 .react-h5-calendar .bottom-operate img {
   width: auto;
-  height: 16px;
+  height: 32px;
 }
 .react-h5-calendar .bottom-operate img.top {
   transform: rotate(180deg);
@@ -113,13 +114,59 @@
   cursor: pointer;
 }
 .react-h5-calendar .activity-dot {
-  width: 4px;
-  height: 4px;
+  width: 8px;
+  height: 8px;
   background-color: #fa9a5d;
   border-radius: 50%;
-  margin-right: 8px;
+  margin-right: 16px;
 }
 .react-h5-calendar .inline-block {
   display: inline-block;
   vertical-align: middle;
+}
+.react-h5-calendar.pc {
+  padding-bottom: 10px;
+  font-size: 14px;
+}
+.react-h5-calendar.pc .calendar-operate {
+  height: 30px;
+  padding: 20px 0;
+}
+.react-h5-calendar.pc .calendar-operate .icon {
+  width: 50px;
+  height: 30px;
+}
+.react-h5-calendar.pc .calendar-operate .icon img {
+  height: 16px;
+}
+.react-h5-calendar.pc .calendar-head .head-cell {
+  height: 34px;
+}
+.react-h5-calendar.pc .calendar-body {
+  height: 216px;
+}
+.react-h5-calendar.pc .calendar-body.week-mode {
+  height: 36px;
+}
+.react-h5-calendar.pc .calendar-body .month-cell .day-cell {
+  height: 36px;
+}
+.react-h5-calendar.pc .calendar-body .month-cell .day-cell .day-text {
+  width: 32px;
+  height: 32px;
+}
+.react-h5-calendar.pc .calendar-body .month-cell .day-cell .dot-mark {
+  width: 4px;
+  height: 4px;
+}
+.react-h5-calendar.pc .bottom-operate {
+  height: 20px;
+}
+.react-h5-calendar.pc .bottom-operate img {
+  height: 16px;
+}
+.react-h5-calendar.pc .activity-dot {
+  width: 4px;
+  height: 4px;
+  margin-right: 8px;
 }

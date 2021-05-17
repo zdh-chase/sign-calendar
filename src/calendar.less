@@ -5,24 +5,25 @@
   }
   box-sizing: border-box;
   width: 100%;
-  padding-bottom: 10px;
+  padding-bottom: 20px;
   overflow: hidden;
-  font-size: 14px;
+  font-size: 28px;
   background-color: #fff;
   .calendar-operate {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 30px;
+    height: 60px;
+    padding: 40px 0;
     .icon {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 50px;
-      height: 30px;
+      width: 100px;
+      height: 60px;
       img {
         width: auto;
-        height: 16px;
+        height: 32px;
       }
       &.left-icon {
         transform: rotate(180deg);
@@ -39,15 +40,15 @@
       flex-basis: 14.28571%;
       align-items: center;
       justify-content: center;
-      height: 34px;
+      height: 68px;
     }
   }
   .calendar-body {
     position: relative;
-    height: 216px;
+    height: 432px;
     transition: height 0.3s;
     &.week-mode {
-      height: 36px;
+      height: 72px;
     }
     .month-cell {
       position: absolute;
@@ -63,7 +64,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 36px;
+        height: 72px;
         position: relative;
         &.is-other-month-day {
           color: #999;
@@ -72,8 +73,8 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 32px;
-          height: 32px;
+          width: 64px;
+          height: 64px;
         }
         .current-day {
           color: #fff;
@@ -85,8 +86,8 @@
           border-radius: 50%;
         }
         .dot-mark {
-          width: 4px;
-          height: 4px;
+          width: 8px;
+          height: 8px;
           background-color: #fa9a5d;
           border-radius: 50%;
           position: absolute;
@@ -99,10 +100,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 20px;
+    height: 40px;
     img {
       width: auto;
-      height: 16px;
+      height: 32px;
       &.top {
         transform: rotate(180deg);
       }
@@ -112,14 +113,67 @@
     cursor: pointer;
   }
   .activity-dot {
-    width: 4px;
-    height: 4px;
+    width: 8px;
+    height: 8px;
     background-color: #fa9a5d;
     border-radius: 50%;
-    margin-right: 8px;
+    margin-right: 16px;
   }
   .inline-block {
     display: inline-block;
     vertical-align: middle;
+  }
+}
+
+.react-h5-calendar {
+  &.pc {
+    padding-bottom: 10px;
+    font-size: 14px;
+    .calendar-operate {
+      height: 30px;
+      padding: 20px 0;
+      .icon {
+        width: 50px;
+        height: 30px;
+        img {
+          height: 16px;
+        }
+      }
+    }
+    .calendar-head {
+      .head-cell {
+        height: 34px;
+      }
+    }
+    .calendar-body {
+      height: 216px;
+      &.week-mode {
+        height: 36px;
+      }
+      .month-cell {
+        .day-cell {
+          height: 36px;
+          .day-text {
+            width: 32px;
+            height: 32px;
+          }
+          .dot-mark {
+            width: 4px;
+            height: 4px;
+          }
+        }
+      }
+    }
+    .bottom-operate {
+      height: 20px;
+      img {
+        height: 16px;
+      }
+    }
+    .activity-dot {
+      width: 4px;
+      height: 4px;
+      margin-right: 8px;
+    }
   }
 }
