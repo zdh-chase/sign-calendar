@@ -62,7 +62,7 @@ class MonthView extends PureComponent {
         e.stopPropagation()
         this.touchStartPositionX = e.touches[0].clientX
         this.touchStartPositionY = e.touches[0].clientY
-        this.isTouching = true
+        // this.isTouching = true
         this.props.onTouchStart(e)
     }
 
