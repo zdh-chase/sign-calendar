@@ -5,7 +5,11 @@ import {throttle, formatMonthData, formatWeekData} from './util'
 import './calendar.less'
 
 const isBetween = require('dayjs/plugin/isBetween')
+const isSameOrBefore = require('dayjs/plugin/isSameOrBefore')
+const isSameOrAfter = require('dayjs/plugin/isSameOrAfter')
 dayjs.extend(isBetween)
+dayjs.extend(isSameOrBefore)
+dayjs.extend(isSameOrAfter)
 
 import arrow from '../public/arrow.svg'
 
@@ -24,6 +28,7 @@ class MonthView extends PureComponent {
             translateIndex: 0,
             calendarY: 0, // 于Y轴的位置
             showType: props.showType,
+            clickDate: '',
         }
         this.isTouching = false
         this.calendarRef = createRef(null)
@@ -130,8 +135,23 @@ class MonthView extends PureComponent {
         this.setState({touch: {x: 0, y: 0}})
     }
 
+    getCurrentDate = () => {
+        let { showType, monthDates } = this.state;
+        const isMonthView = showType === 'month'
+        let showDateInfo = {};
+        const dataArray = monthDates[1]
+        if (isMonthView) {
+            showDateInfo = {
+                fromDate: dataArray[0].format('YYYY-MM-DD'),
+                toDate: dataArray[dataArray.length - 1].format('YYYY-MM-DD'),
+            };
+        }
+        return showDateInfo;
+    }
+
     handleMonthToggle = type => {
-        const {currentMonthFirstDay, currenWeekFirstDay, showType} = this.state
+        const { handleMonthToggleClick } = this.props;
+        const {currentMonthFirstDay, currenWeekFirstDay, showType, monthDates, weekDates} = this.state
         const isMonthView = showType === 'month'
         const isPrev = type === 'prev'
         const formatFun = isMonthView ? formatMonthData : formatWeekData
@@ -145,10 +165,26 @@ class MonthView extends PureComponent {
                 dataArray[0].valueOf(),
                 dataArray[dataArray.length - 1].add(1, 'day').valueOf(),
             )
+            let showDateInfo = {};
+            if (isMonthView) {
+                showDateInfo = {
+                    fromDate: dataArray[0].format('YYYY-MM-DD'),
+                    toDate: dataArray[dataArray.length - 1].format('YYYY-MM-DD'),
+                };
+            }
+            handleMonthToggleClick({
+                type,
+                ...showDateInfo,
+            });
         })
     }
 
     handleDayClick = date => {
+        let { clickDate } = this.state;
+        let flag =  dayjs(dayjs(date).format('YYYY-MM-DD')).isSame(clickDate, 'day');
+        this.setState({
+            clickDate: flag ? '' : date,
+        })
         this.props.onDateClick(date)
     }
 
@@ -168,9 +204,28 @@ class MonthView extends PureComponent {
                         activityDates.map((elem, index) => {
                             let startTime = elem.formDate;
                             let endTime = elem.toDate;
-                            let start = dayjs(startTime).isBetween(showDateStart, showDateEnd, null, '[]');
-                            let end = dayjs(endTime).isBetween(showDateStart, showDateEnd, null, '[]');
-                            if (start || end) {
+                            let flag = false;
+                            // 活动不限到不限
+                            if (+startTime === -1 && +endTime === -1) {
+                                flag = true;
+                            }
+                            // 活动不限到限
+                            if (+startTime === -1 && +endTime !== -1) {
+                                flag = dayjs(dayjs(showDateStart).format('YYYY-MM-DD')).isSameOrBefore(endTime, 'day');
+                                flag = flag || dayjs(dayjs(showDateEnd).format('YYYY-MM-DD')).isSameOrBefore(endTime, 'day');
+                            }
+                            // 活动限到不限
+                            if (+startTime !== -1 && +endTime === -1) {
+                                flag = dayjs(dayjs(showDateStart).format('YYYY-MM-DD')).isSameOrAfter(startTime, 'day');
+                                flag = flag || dayjs(dayjs(showDateEnd).format('YYYY-MM-DD')).isSameOrAfter(startTime, 'day');
+                            }
+                            // 活动限到限
+                            if (+startTime !== -1 && +endTime !== -1) {
+                                let start = dayjs(startTime).isBetween(showDateStart, showDateEnd, null, '[]');
+                                let end = dayjs(endTime).isBetween(showDateStart, showDateEnd, null, '[]');
+                                flag = start || end;
+                            }
+                            if (flag) {
                                 return (
                                     <div key={`activity_${index}`}>
                                     <span
@@ -202,6 +257,7 @@ class MonthView extends PureComponent {
             currentMonthFirstDay,
             currenWeekFirstDay,
             showType,
+            clickDate,
         } = this.state
         const {
             currentDate,
@@ -212,15 +268,16 @@ class MonthView extends PureComponent {
             activityDates,
             pc,
             showCurrentDay,
+            className,
         } = this.props
         const isMonthView = showType === 'month';
         return (
-            <div className={`react-h5-calendar ${pc ? 'pc' : ''}`}>
+            <div className={`${className} react-h5-calendar ${pc ? 'pc' : ''}`}>
                 <div className="calendar-operate">
                     <div className="icon left-icon def-cur" onClick={this.handleMonthToggle.bind(this, 'prev')}>
                         <img src={arrow}/>
                     </div>
-                    <div>{(isMonthView ? currentMonthFirstDay : currenWeekFirstDay).format('YYYY月MM日')}</div>
+                    <div>{(isMonthView ? currentMonthFirstDay : currenWeekFirstDay).format('YYYY年MM月')}</div>
                     <div className="icon right-icon def-cur" onClick={this.handleMonthToggle.bind(this, 'next')}>
                         <img src={arrow}/>
                     </div>
@@ -262,13 +319,49 @@ class MonthView extends PureComponent {
                                         const isMarkDate = markDates.find(i => date.isSame(i.date, 'day'));
                                         const resetMarkType = (isMarkDate && isMarkDate.markType) || markType
                                         const showDotMark = isCurrentDay ? false : isMarkDate && resetMarkType === 'dot'
-                                        const showCircleMark = isCurrentDay ? false : isMarkDate && resetMarkType === 'circle';
+                                        let showCircleMark = isCurrentDay ? false : isMarkDate && resetMarkType === 'circle';
                                         const solid = isMarkDate && resetMarkType === 'solid';
                                         isCurrentDay = isCurrentDay || solid;
                                         const isActivityDay = activityDates.find(i => {
-                                            return dayjs(dayjs(date).format('YYYY-MM-DD')).isBetween(i.formDate, i.toDate, null, '[]');
+                                            // 没有不限日期
+                                            if (+i.formDate !== -1 && +i.toDate !== -1) {
+                                              return dayjs(dayjs(date).format('YYYY-MM-DD')).isBetween(i.formDate, i.toDate, null, '[]');
+                                            }
+                                            if (+i.formDate === -1 && +i.toDate === -1) {
+                                                return true;
+                                            }
+                                            // 开始不限
+                                            if(+i.formDate === -1) {
+                                                return dayjs(dayjs(date).format('YYYY-MM-DD')).isSameOrBefore(i.toDate, 'day');
+                                            }
+                                            // 结束不限
+                                            if(+i.toDate === -1) {
+                                                return dayjs(dayjs(date).format('YYYY-MM-DD')).isSameOrAfter(i.formDate, 'day');
+                                            }
+                                            return false;
                                         });
                                         const dotColor = isActivityDay ? isActivityDay.color : isMarkDate ? isMarkDate.color : '';
+                                        let markStyle = {};
+                                        if (showCircleMark) {
+                                            markStyle.borderColor = isMarkDate.color || '#fa9a5d';
+                                        }
+                                        if (solid) {
+                                            markStyle.background = isMarkDate.color || '#fa9a5d';
+                                        }
+                                        // pc端 点击高亮
+                                        if (pc) {
+                                            isCurrentDay = clickDate ? date.isSame(clickDate, 'day') : false;
+                                            markStyle.background = isCurrentDay ? markStyle.background : 'none';
+                                            if (showCircleMark) {
+                                                markStyle.borderColor = isCurrentDay ? '#fa9a5d' : isMarkDate.color;
+                                            }
+                                        }
+                                        // 当天日期圈出来
+                                        let isToday = date.isSame(dayjs().format('YYYY-MM-DD'), 'day');
+                                        if (isToday) {
+                                            showCircleMark = !isCurrentDay;
+                                            markStyle.borderColor = 'red';
+                                        }
 
                                         return (
                                             <div
@@ -280,16 +373,14 @@ class MonthView extends PureComponent {
                                                     className={`day-text ${isCurrentDay ? 'current-day' : ''} ${
                                                         showCircleMark ? 'circle-mark' : ''
                                                     }`}
-                                                    style={
-                                                        showCircleMark ? {borderColor: isMarkDate.color || '#4378be'} : null
-                                                    }
+                                                    style={markStyle}
                                                 >
                                                     {date.format('DD')}
                                                 </div>
                                                 {(showDotMark || isActivityDay) && (
                                                     <div
                                                         className={isMarkDate || isActivityDay ? 'dot-mark' : ''}
-                                                        style={{background: dotColor || '#4378be'}}
+                                                        style={isMarkDate && solid ? {background: dotColor || '#4378be'} : {background: '#999'}}
                                                     />
                                                 )}
                                             </div>
@@ -324,6 +415,7 @@ MonthView.propTypes = {
 }
 
 MonthView.defaultProps = {
+    className: '',
     currentDate: dayjs().format('YYYY-MM-DD'),
     showType: 'month',
     transitionDuration: 0.3,
@@ -332,6 +424,7 @@ MonthView.defaultProps = {
     onTouchMove: () => {},
     onTouchEnd: () => {},
     onToggleShowType: () => {},
+    handleMonthToggleClick: () => {},
     markType: 'dot',
     markDates: [],
     disableWeekView: false,

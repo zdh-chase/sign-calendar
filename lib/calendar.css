@@ -95,7 +95,7 @@
   background-color: #fa9a5d;
   border-radius: 50%;
   position: absolute;
-  bottom: 0px;
+  bottom: -8px;
 }
 .react-h5-calendar .bottom-operate {
   display: flex;
@@ -143,21 +143,18 @@
   height: 34px;
 }
 .react-h5-calendar.pc .calendar-body {
-  height: 216px;
+  height: 290px;
 }
 .react-h5-calendar.pc .calendar-body.week-mode {
   height: 36px;
 }
 .react-h5-calendar.pc .calendar-body .month-cell .day-cell {
   height: 36px;
+  margin: 4px 0;
 }
 .react-h5-calendar.pc .calendar-body .month-cell .day-cell .day-text {
   width: 32px;
   height: 32px;
-}
-.react-h5-calendar.pc .calendar-body .month-cell .day-cell .dot-mark {
-  width: 4px;
-  height: 4px;
 }
 .react-h5-calendar.pc .bottom-operate {
   height: 20px;
@@ -166,7 +163,7 @@
   height: 16px;
 }
 .react-h5-calendar.pc .activity-dot {
-  width: 4px;
-  height: 4px;
+  width: 8px;
+  height: 8px;
   margin-right: 8px;
 }
