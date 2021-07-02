@@ -292,9 +292,9 @@ class MonthView extends PureComponent {
                 <div
                     className={`calendar-body ${isMonthView ? '' : 'week-mode'}`}
                     ref={this.calendarRef}
-                    onTouchStart={this.handleTouchStart}
-                    onTouchMove={this.handleTouchMove}
-                    onTouchEnd={this.handleTouchEnd}
+                    // onTouchStart={this.handleTouchStart}
+                    // onTouchMove={this.handleTouchMove}
+                    // onTouchEnd={this.handleTouchEnd}
                 >
                     <div
                         style={{
@@ -362,7 +362,6 @@ class MonthView extends PureComponent {
                                             showCircleMark = !isCurrentDay;
                                             markStyle.borderColor = 'red';
                                         }
-
                                         return (
                                             <div
                                                 key={itemIndex}
